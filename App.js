@@ -24,15 +24,15 @@ export default function App() {
     axios.delete(baseURL + '/' + id).then((res) => console.log("deleted"));
     Alert.alert('Kullanıcı silindi')
   }
-  function alertDelete({ id }) {
+  function alertDelete({ item }) {
 
-    Alert.alert('Kullanıcı silinecek', 'Onaylıyor musunuz?', [
+    Alert.alert('Uyarı!', `${item.name} silinecek.`, [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      { text: 'Delete', onPress: () => Delete(id) },
+      { text: 'Delete', onPress: () => Delete(item.id) },
     ]);
   }
 
@@ -54,7 +54,7 @@ export default function App() {
 
           <Card.Title title={item.name + ' (' + item.username + ')'} subtitle={item.email} left={() => LeftContent(item)} />
           <Divider bold={true} />
-          <Card.Content>
+          <Card.Content style={styles.paragraph}>
 
             <Text>Street: {item.address.street}  Suite:{item.address.suite}  City:{item.address.city}  Zipcode:{item.address.zipcode}</Text>
             <Text>Phone: {item.phone}</Text>
@@ -62,7 +62,7 @@ export default function App() {
           <Divider bold={true} />
 
 
-          <Button style={styles.button} onPress={() => alertDelete(item.id)}>Delete</Button>
+          <Button style={styles.button} onPress={() => alertDelete({item})}>Delete</Button>
         </Card>
       </View>
     )
@@ -85,12 +85,17 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: '#FFF',
   },
+  paragraph: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: '#FFF',
+  },
   item: {
     backgroundColor: 'orange',
     fontSize: 24,
   },
   card: {
-    margin: '2%',
+    margin: 0,
     alignSelf: 'center',
     display: 'flex',
     flexDirection: 'column',
