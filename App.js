@@ -3,7 +3,7 @@ import { Alert, FlatList } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import React, { Component, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Avatar, Button, Card, Paragraph, Title } from 'react-native-paper';
+import { Avatar, Button, Card, Divider, Paragraph, Title } from 'react-native-paper';
 import SafeAreaView from 'react-native-safe-area-view';
 
 
@@ -20,8 +20,20 @@ export default function App() {
 
 
   }, [])
-  function Delete({ id }) {
-    axios.delete(baseURL + '/' + id).then((res) => console.log("deleted"))
+  function Delete(id) {
+    axios.delete(baseURL + '/' + id).then((res) => console.log("deleted"));
+    Alert.alert('Kullanıcı silindi')
+  }
+  function alertDelete({ id }) {
+
+    Alert.alert('Kullanıcı silinecek', 'Onaylıyor musunuz?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'Delete', onPress: () => Delete(id) },
+    ]);
   }
 
   function LeftContent(item) {
@@ -37,12 +49,20 @@ export default function App() {
   _renderItem = ({ item, index }) => {
     return (
       <View style={styles.container}>
+
         <Card style={styles.card}>
+
           <Card.Title title={item.name + ' (' + item.username + ')'} subtitle={item.email} left={() => LeftContent(item)} />
+          <Divider bold={true} />
           <Card.Content>
+
             <Text>Street: {item.address.street}  Suite:{item.address.suite}  City:{item.address.city}  Zipcode:{item.address.zipcode}</Text>
+            <Text>Phone: {item.phone}</Text>
           </Card.Content>
-          <Button style={styles.button} onPress={() => Delete(item.id)}>Delete</Button>
+          <Divider bold={true} />
+
+
+          <Button style={styles.button} onPress={() => alertDelete(item.id)}>Delete</Button>
         </Card>
       </View>
     )
@@ -76,13 +96,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: 'blue',
     width: '80%',
-    backgroundColor: '#ccc',
+    backgroundColor: '#fff',
     fontSize: 24,
   },
   button: {
     alignSelf: 'flex-end',
     width: '30%',
-    backgroundColor: '#68a0cf',
     borderRadius: 10,
     borderWidth: 0,
     borderColor: '#fff',
